@@ -11,12 +11,13 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import tech.harish.apps.n26.util.TestDataGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class TransactionsControllerIT {
+public class TransactionsIT {
 
     @LocalServerPort
     private int port;
@@ -25,14 +26,8 @@ public class TransactionsControllerIT {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void shouldReturn204ForOldTransaction() throws Exception {
-
-        String requestJson = new ObjectMapper().writeValueAsString(ImmutableMap.builder()
-                .put("amount", "12.45")
-                .put("timestamp", ""+1527283626347L)
-                .build());
-
-        ResponseEntity<?> actual = makePostRequest(requestJson, "/transactions");
+    public void shouldReturn204ForOldTransaction() {
+        ResponseEntity<?> actual = makePostRequest(TestDataGenerator.getJson(12.22,1527283626347L), "/transactions");
         int actualStatus = actual.getStatusCodeValue();
 
         assertThat(actualStatus).isEqualTo(204);
@@ -41,13 +36,8 @@ public class TransactionsControllerIT {
 
 
     @Test
-    public void shouldReturn201ForOldTransaction() throws Exception {
-        String requestJson = new ObjectMapper().writeValueAsString(ImmutableMap.builder()
-                .put("amount", "12.45")
-                .put("timestamp", ""+System.currentTimeMillis())
-                .build());
-
-        ResponseEntity<?> actual = makePostRequest(requestJson, "/transactions");
+    public void shouldReturn201ForOldTransaction()  {
+        ResponseEntity<?> actual = makePostRequest(TestDataGenerator.getJson(12.22,System.currentTimeMillis()), "/transactions");
         int actualStatus = actual.getStatusCodeValue();
 
         assertThat(actualStatus).isEqualTo(201);
