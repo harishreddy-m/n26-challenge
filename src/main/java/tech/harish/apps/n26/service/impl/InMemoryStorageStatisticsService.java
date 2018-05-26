@@ -38,11 +38,11 @@ public class InMemoryStorageStatisticsService implements StatisticsService {
     }
 
 
-    private Double sum;
-    private Double average;
-    private Double maximum;
-    private Double minimum;
-    private Long count;
+    private Double sum= (double) 0;
+    private Double average= (double) 0;
+    private Double maximum= (double) 0;
+    private Double minimum= (double) 0;
+    private Long count= 0L;
 
     @Override
     public Double getSum() {
