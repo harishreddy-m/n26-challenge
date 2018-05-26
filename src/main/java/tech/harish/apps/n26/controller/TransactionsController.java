@@ -34,6 +34,9 @@ public class TransactionsController {
             logger.debug("Processing the transaction with timestamp {}, received at {}",transaction.getTimestamp(),receivedAt);
 
             logger.debug("Processed the transaction with timestamp {}, received at {}",transaction.getTimestamp(),receivedAt);
+            /**Note: CREATED status should send created resource location.
+            /*This is only a small assignment, It's okay. ¯\_(ツ)_/¯
+             */
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
