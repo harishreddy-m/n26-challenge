@@ -10,9 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import tech.harish.apps.n26.controller.StatisticsController;
 import tech.harish.apps.n26.service.StatisticsService;
-import tech.harish.apps.n26.util.TestDataGenerator;
-
-import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

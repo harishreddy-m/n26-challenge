@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import tech.harish.apps.n26.controller.TransactionsController;
 import tech.harish.apps.n26.service.StatisticsService;
-import tech.harish.apps.n26.util.TestDataGenerator;
+import tech.harish.apps.n26.util.TestUtils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -47,7 +47,7 @@ public class TransactionControllerTests {
     @Test
     public void testPostValidTransaction() throws Exception {
         this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON)
-                .content(TestDataGenerator.getJson(123.12,1527283626347L)))
+                .content(TestUtils.getJson(123.12,1527283626347L)))
                 //.andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }

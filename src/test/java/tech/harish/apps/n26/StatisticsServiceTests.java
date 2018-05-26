@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,8 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StatisticsServiceTests {
 
     /*
-     * Using time span of 5 seconds for testing "app.series.duration" property
+     * Using time span of 3 seconds for testing "app.series.duration" property
      */
+    @Value("${app.series.duration}")
+    private int testSpan;
+
     @Autowired
     private StatisticsService inmemoryService;
 
@@ -50,19 +54,19 @@ public class StatisticsServiceTests {
         ExecutorService executor = Executors.newFixedThreadPool(12);
         for(int i=0;i<10;i++){
             executor.submit(() -> {
-                Transaction randomData= new Transaction(10.23,System.currentTimeMillis()- new Random().nextInt(4999));
+                Transaction randomData= new Transaction(10.23,System.currentTimeMillis()- new Random().nextInt(testSpan*1000));
                 inmemoryService.recordTransaction(randomData);
             });
         }
 
         executor.submit(() -> {
-            Transaction randomData= new Transaction(34.56,System.currentTimeMillis()- new Random().nextInt(4999));
+            Transaction randomData= new Transaction(34.56,System.currentTimeMillis()- new Random().nextInt(testSpan*1000));
             inmemoryService.recordTransaction(randomData);
         });
 
-        //Since this transaction is older than 5 seconds, metrics calculation should not consider this
+        //Since this transaction is older than 3 seconds, metrics calculation should not consider this
         executor.submit(() -> {
-            Transaction randomData= new Transaction(3.14,System.currentTimeMillis()- 6000);
+            Transaction randomData= new Transaction(3.14,System.currentTimeMillis()- (testSpan + 1) * 1000);
             inmemoryService.recordTransaction(randomData);
         });
 
