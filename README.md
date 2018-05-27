@@ -1,4 +1,5 @@
 # n26-challenge
+[![Build Status](https://travis-ci.com/harishreddy-m/n26-challenge.svg?branch=develop)](https://travis-ci.com/harishreddy-m/n26-challenge)
 
 ### Pre-requisites
 1. Java 8
