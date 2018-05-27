@@ -10,11 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import tech.harish.apps.n26.controller.TransactionsController;
 import tech.harish.apps.n26.service.StatisticsService;
-import tech.harish.apps.n26.util.TestUtils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static tech.harish.apps.n26.util.TestUtils.getJson;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(TransactionsController.class)
@@ -35,11 +34,26 @@ public class TransactionControllerTests {
                 .andExpect(status().is4xxClientError());
     }
 
+    @Test
+    public void testMissingTimestampTransaction() throws Exception {
+        this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"amount\":1234.56}"))
+                //.andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
 
     @Test
-    public void testPostInvalidTransaction() throws Exception {
+    public void testFutureTimestampTransaction() throws Exception {
         this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"amount\":123.23}"))
+                .content(getJson(123.12,1627283626347L)))
+                //.andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testNegativeAmountTransaction() throws Exception {
+        this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON)
+                .content(getJson(-123.12,1527283626347L)))
                 //.andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -47,7 +61,7 @@ public class TransactionControllerTests {
     @Test
     public void testPostValidTransaction() throws Exception {
         this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.getJson(123.12,1527283626347L)))
+                .content(getJson(123.12,1527283626347L)))
                 //.andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
