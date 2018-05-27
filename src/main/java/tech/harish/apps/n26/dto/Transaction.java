@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @ApiModel(description = "a transaction event")
 /*
@@ -15,10 +16,12 @@ public class Transaction {
 
     @ApiModelProperty(notes = "transaction amount", example = "12.3", required = true)
     @NotNull
+    @PositiveOrZero(message = "Amount cannot be negative")
     private Double amount;
 
     @ApiModelProperty(notes = "transaction time in epoch in millis in UTC time zone", example = "1478192204000", required = true)
     @NotNull
+    @PastTimestamp(message="Invalid timestamp.Timestamp is from future")
     private Long timestamp;
 
     @JsonCreator
